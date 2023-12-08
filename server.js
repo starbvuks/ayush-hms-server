@@ -6,6 +6,7 @@ const patientDataRoute = require("./routes/patientEntryRoute");
 const distanceRoute = require("./routes/distanceRoute");
 const loginRoute = require("./routes/loginRoute");
 const adminLoginRoute = require("./routes/adminLoginRoute");
+const adminDispensaryDashRoute = require("./routes/adminDispensaryDashRoute");
 
 const db = require("./db/index");
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use("/patient-data", patientDataRoute);
 app.use("/", distanceRoute);
 app.use("/", loginRoute);
 app.use("/", adminLoginRoute);
+app.use("/", adminDispensaryDashRoute);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
