@@ -3,10 +3,13 @@ const app = express();
 const port = 3000;
 
 const patientDataRoute = require("./routes/patientEntryRoute");
+const patientEntiresRoute = require("./routes/patientEntiresRoute");
 const distanceRoute = require("./routes/distanceRoute");
 const loginRoute = require("./routes/loginRoute");
 const adminLoginRoute = require("./routes/adminLoginRoute");
 const adminDispensaryDashRoute = require("./routes/adminDispensaryDashRoute");
+
+const patientEntrySearch = require("./routes/search/patientEntrySearch");
 
 const db = require("./db/index");
 app.use(express.json());
@@ -21,10 +24,13 @@ app.use(function (req, res, next) {
 });
 
 app.use("/patient-data", patientDataRoute);
+app.use("/", patientEntiresRoute);
 app.use("/", distanceRoute);
 app.use("/", loginRoute);
 app.use("/", adminLoginRoute);
 app.use("/", adminDispensaryDashRoute);
+
+app.use("/", patientEntrySearch);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
