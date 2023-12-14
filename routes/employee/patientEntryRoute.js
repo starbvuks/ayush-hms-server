@@ -1,12 +1,12 @@
 const GeoPoint = require("geopoint");
 const cron = require("node-cron");
-const db = require("../db/index");
-const { calculateDistance } = require("../models/distanceModel");
+const db = require("../../db/index");
+const { calculateDistance } = require("../../models/distanceModel");
 
 const express = require("express");
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post("/patient-entry", async (req, res) => {
   const { patientData, employeeId, dispensaryId, location } = req.body;
 
   // Save patient data
@@ -64,15 +64,17 @@ router.post("/", async (req, res) => {
     // Save attendance data
     const attendanceRecord = {
       employee_id: employeeId,
+      dispensary_id: dispensaryId, 
       entry_date: new Date(),
       location: `POINT(${location.longitude} ${location.latitude})`,
-      distance: distance, // You can calculate the distance here if needed
+      distance: distance, 
     };
 
     const attendanceInsertText =
-      "INSERT INTO Attendance(employee_id, entry_date, location, distance) VALUES($1, $2, ST_GeomFromText($3), $4)";
+      "INSERT INTO Attendance(employee_id, dispensary_id, entry_date, location, distance) VALUES($1, $2, $3, ST_GeomFromText($4), $5)";
     const attendanceInsertValues = [
       attendanceRecord.employee_id,
+      attendanceRecord.dispensary_id, 
       attendanceRecord.entry_date,
       attendanceRecord.location,
       attendanceRecord.distance,

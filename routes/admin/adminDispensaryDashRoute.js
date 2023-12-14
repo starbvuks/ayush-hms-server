@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../db/index");
-const isAdmin = require("../models/isAdminModel");
+const db = require("../../db/index");
 
 router.get("/admin/dashboard", async (req, res) => {
   try {

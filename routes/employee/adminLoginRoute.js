@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { validationResult } = require("express-validator");
-const db = require("../db/index");
+const db = require("../../db/index");
 
-router.post("/login", async (req, res) => {
+router.post("/admin/login", async (req, res) => {
   // Input validation
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
 
   try {
     // Check if username exists in the database
-    const user = await db.query("SELECT * FROM employee WHERE username = $1", [
+    const user = await db.query("SELECT * FROM admin WHERE username = $1", [
       username,
     ]);
 
@@ -29,11 +29,11 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    // If the credentials are valid, return success and employee_id and registered_dispensary
+    // If the credentials are valid, return success and admin_id and role
     res.json({
       message: "Logged in successfully",
-      employee_id: user.rows[0].employee_id,
-      registered_dispensary: user.rows[0].registered_dispensary,
+      admin_id: user.rows[0].admin_id,
+      role: user.rows[0].role,
     });
   } catch (error) {
     console.error(error);
