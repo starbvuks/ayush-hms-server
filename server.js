@@ -5,13 +5,14 @@ const port = 3000;
 const patientDataRoute = require("./routes/employee/patientEntryRoute");
 const patientEntiresRoute = require("./routes/employee/patientEntiresRoute");
 const patientEntrySearch = require("./routes/search/patientEntrySearch");
+const myDispensaryRoute = require("./routes/employee/myDispensaryRoute");
 
 const loginRoute = require("./routes/admin/loginRoute");
 const adminLoginRoute = require("./routes/employee/adminLoginRoute");
 
+const adminDispensaryEntriesRoute = require("./routes/admin/adminDispensaryEntries");
 const adminDispensaryDashRoute = require("./routes/admin/adminDispensaryDashRoute");
-const adminEmployeesRoute = require("./routes/admin/adminEmployeesRoute")
-
+const adminEmployeesRoute = require("./routes/admin/adminEmployeesRoute");
 
 const db = require("./db/index");
 app.use(express.json());
@@ -28,10 +29,12 @@ app.use(function (req, res, next) {
 app.use("/", patientDataRoute);
 app.use("/", patientEntiresRoute);
 app.use("/", patientEntrySearch);
+app.use("/", myDispensaryRoute);
 
 app.use("/", loginRoute);
 app.use("/", adminLoginRoute);
 
+app.use("/", adminDispensaryEntriesRoute);
 app.use("/", adminDispensaryDashRoute);
 app.use("/", adminEmployeesRoute);
 
