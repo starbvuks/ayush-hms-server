@@ -14,7 +14,6 @@ const adminDispensaryEntriesRoute = require("./routes/admin/adminDispensaryEntri
 const adminDispensaryDashRoute = require("./routes/admin/adminDispensaryDashRoute");
 const adminEmployeesRoute = require("./routes/admin/adminEmployeesRoute");
 
-const db = require("./db/index");
 app.use(express.json());
 
 app.use(function (req, res, next) {

@@ -63,24 +63,24 @@ router.get("/admin/dispensaries-entry/search", async (req, res) => {
     let query = "SELECT * FROM patiententry";
     let params = [];
 
-    if (searchTerm) {
-      query +=
-        " WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR diagnosis ILIKE $1 OR treatment ILIKE $1 OR other_info ILIKE $1";
-      params.push(`%${searchTerm}%`);
-    }
-
     if (timeframe) {
       if (timeframe === "today") {
-        query += " AND DATE(entry_date) = CURRENT_DATE";
+        query += " WHERE DATE(entry_date) = CURRENT_DATE";
       } else if (timeframe === "lastweek") {
-        query += " AND entry_date >= NOW() - INTERVAL '7 days'";
+        query += " WHERE entry_date >= NOW() - INTERVAL '7 days'";
       } else if (timeframe === "lastmonth") {
-        query += " AND entry_date >= NOW() - INTERVAL '1 month'";
+        query += " WHERE entry_date >= NOW() - INTERVAL '1 month'";
       } else if (timeframe === "lastyear") {
-        query += " AND entry_date >= NOW() - INTERVAL '1 year'";
+        query += " WHERE entry_date >= NOW() - INTERVAL '1 year'";
       } else if (timeframe === "alltime") {
         // No additional condition needed
       }
+    }
+
+    if (searchTerm) {
+      query +=
+        " AND (first_name ILIKE $1 OR last_name ILIKE $1 OR diagnosis ILIKE $1 OR treatment ILIKE $1 OR other_info ILIKE $1)";
+      params.push(`%${searchTerm}%`);
     }
 
     const entries = await db.query(query, params);

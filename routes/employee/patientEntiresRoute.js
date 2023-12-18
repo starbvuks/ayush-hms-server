@@ -9,7 +9,7 @@ router.get("/patient-entries", async (req, res) => {
     const offset = (page - 1) * pageSize;
 
     const patientEntries = await db.query(
-      "SELECT * FROM patiententry WHERE dispensary_id = $1 ORDER BY entry_id LIMIT $2 OFFSET $3",
+      "SELECT * FROM patiententry WHERE dispensary_id = $1 ORDER BY entry_date DESC LIMIT $2 OFFSET $3",
       [req.query.dispensary_id, pageSize, offset]
     );
 
