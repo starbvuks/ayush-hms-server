@@ -66,9 +66,13 @@ router.get(
       }
 
       if (searchTerm) {
-        query +=
-          " AND (first_name ILIKE $2 OR last_name ILIKE $2 OR diagnosis ILIKE $2 OR treatment ILIKE $2 OR other_info ILIKE $2)";
-        params.push(`%${searchTerm}%`);
+        query += ` AND EXISTS (
+        SELECT 1 FROM unnest(string_to_array($${
+          params.length + 1
+        }, ' ')) AS term
+        WHERE tsv @@ phraseto_tsquery('english', term)
+        )`;
+        params.push(searchTerm);
       }
 
       const entries = await db.query(query, params);
