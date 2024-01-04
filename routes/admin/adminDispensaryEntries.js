@@ -125,9 +125,9 @@ router.get("/admin/all-dispensaries-entry/search", async (req, res) => {
 
     if (searchTerm) {
       query += ` AND EXISTS (
-       SELECT 1 FROM unnest(string_to_array($${params.length + 1}, ' ')) AS term
-       WHERE tsv @@ phraseto_tsquery('english', term)
-       )`;
+      SELECT 1 FROM unnest(string_to_array($${params.length + 1}, ' ')) AS term
+      WHERE tsv @@ phraseto_tsquery('english', term)
+      )`;
       params.push(searchTerm);
     }
 
