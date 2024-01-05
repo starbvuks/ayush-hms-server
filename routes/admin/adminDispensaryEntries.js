@@ -80,7 +80,7 @@ router.get(
           query +=
             " WHERE dispensary_id = $1 AND entry_date >= NOW() - INTERVAL '364 days'";
         } else if (timeframe === "alltime") {
-          // No additional condition needed
+          query += " WHERE dispensary_id = $1";
         }
       }
 
@@ -94,8 +94,15 @@ router.get(
         params.push(searchTerm);
       }
 
+      let countQuery = `SELECT COUNT(*) FROM (${query}) AS subquery`;
+
       const entries = await db.query(query, params);
-      res.json(entries.rows);
+      const totalEntries = await db.query(countQuery, params);
+
+      res.json({
+        totalEntries: totalEntries.rows[0].count,
+        entries: entries.rows,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({
@@ -120,9 +127,12 @@ router.get("/admin/all-dispensaries-entry/search", async (req, res) => {
         query += " WHERE entry_date >= NOW() - INTERVAL '30 days'";
       } else if (timeframe === "lastyear") {
         query += " WHERE entry_date >= NOW() - INTERVAL '364 days'";
+      } else if (timeframe === "alltime") {
+        query += " WHERE TRUE";
       }
     }
 
+    // append to timeframe queries
     if (searchTerm) {
       query += ` AND EXISTS (
       SELECT 1 FROM unnest(string_to_array($${params.length + 1}, ' ')) AS term
@@ -131,8 +141,15 @@ router.get("/admin/all-dispensaries-entry/search", async (req, res) => {
       params.push(searchTerm);
     }
 
+    let countQuery = `SELECT COUNT(*) FROM (${query}) AS subquery`;
+
     const entries = await db.query(query, params);
-    res.json(entries.rows);
+    const totalEntries = await db.query(countQuery, params);
+
+    res.json({
+      totalEntries: totalEntries.rows[0].count,
+      entries: entries.rows,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({

@@ -44,8 +44,7 @@ router.get("/admin/dispensaries/search", async (req, res) => {
     let params = [];
 
     if (searchTerm) {
-      query +=
-        " WHERE name ILIKE $1 OR city ILIKE $1 OR district ILIKE $1 OR state ILIKE $1";
+      query += " WHERE name ILIKE $1 OR city ILIKE $1 OR district ILIKE $1";
       params.push(`%${searchTerm}%`);
     }
 
