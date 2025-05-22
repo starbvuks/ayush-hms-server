@@ -271,9 +271,3 @@ To connect the mobile app to this server:
 2. If running on an emulator:
    - Android: Use `10.0.2.2:3000` as the API URL
    - iOS: Use `localhost:3000` as the API URL
-
-## 📋 License
-[Specify license information]
-
-## 👥 Contributors
-[List of contributors] 
